@@ -13,7 +13,6 @@
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 	<script src="/javascripts/factories.js"></script>
 	<script src="/javascripts/controllers.js"></script>
-	<script src="/javascripts/sendHubAppRoutes.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -22,8 +21,9 @@
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 					<div class="row">
 						<div class="col-xs-12">
-							<h2 ng-bind="form_name"></h2>
-							<p class="errors" ng-repeat="error in errors" ng-bind="error.message"></p>
+							<h2 ng-hide="editing">Create Contact</h2>
+							<h2 ng-show="editing">Edit Contact</h2>
+							<p class="errors" ng-repeat="error in errors track by $index" ng-bind="error"></p>
 							<div class="col-xs-12">
 								<form id="contactForm" class="form-horizontal" role="form">
 									<div class="form-group">
@@ -51,12 +51,12 @@
 						<div class="col-xs-12">
 							<h3>Contacts:</h3>
 							<accordion close-others="oneAtATime">
-								<accordion-group heading="{{ contact.contact_name }}" ng-repeat="contact in contacts | filter: new_contact.contact_name | filter: new_contact.phone_number">
+								<accordion-group heading="{{ contact.name }}" ng-repeat="contact in contacts track by $index | filter: new_contact.contact_name | filter: new_contact.phone_number">
 								<accordion-heading>
-									<a class="contact_header" ng-click='selectContact(contact)' ng-bind="contact.contact_name"></a>
+									<a class="contact_header" ng-click='selectContact(contact, $index)'><span ng-bind="contact.name"></span></a>
 								</accordion-heading>
-									<h3 class="contact_name">{{ contact.contact_name }}</h3>
-									<p class="phone_number" ng-bind="contact.phone_number"></p>
+									<h3 class="contact_name"><span ng-bind="contact.name"></span></h3>
+									<p class="phone_number"><span ng-bind="contact.number"></span></p>
 								</accordion-group>
 							</accordion>
 						</div>
@@ -64,7 +64,7 @@
 				</div>
 				<div id="messageSection" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
 					<h3>Send Message</h3>
-					<div ng-repeat="msgErr in messageError">
+					<div ng-repeat="msgErr in messageError track by $index">
 						<p class="noContactSelectedError errors" ng-bind="msgErr"></p>
 					</div>
 					<div class="col-xs-12">
@@ -73,11 +73,12 @@
 							<p ng-bind="recipientPhoneNumber"></p>
 						</div>
 						<form class="form-horizontal" role="form">
-							<input type="hidden" name="id" id="recipientID">
+							<input type="hidden" name="id" id="recipientID" ng-bind="recipientID">
 							<div class="form-group">
 								<textarea  ng-model="new_message.text_message" class="form-control" type="text" name="text_message" placeholder="Type message here..."></textarea>
 							</div>
 							<div class="form-group">
+								<p class="success" ng-bind="msgStatus"></p>
 								<button id="sendMessage" class="btn btn-primary" ng-click="sendMessage()">Send</button>
 							</div>
 						</form>

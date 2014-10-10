@@ -10,6 +10,11 @@ a {
 .contact_header {
 	color:black;
 }
+
 .errors {
 	color:red;
+}
+
+.success {
+	color:green;
 }
