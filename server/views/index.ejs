@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="sendHubApp">
+<head>
+	<title ng-bind="title"></title>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.js"></script>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="/javascripts/jquery.js"></script>
+	<script src="/javascripts/sendHubApp.js"></script>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<script src="/javascripts/factories.js"></script>
+	<script src="/javascripts/controllers.js"></script>
+	<script src="/javascripts/sendHubAppRoutes.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row" ng-controller="contacts">
+			<div class="row">
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+					<div class="row">
+						<div class="col-xs-12">
+							<h2 ng-bind="form_name"></h2>
+							<p class="errors" ng-repeat="error in errors" ng-bind="error.message"></p>
+							<div class="col-xs-12">
+								<form id="contactForm" class="form-horizontal" role="form">
+									<div class="form-group">
+										<input ng-model="new_contact.contact_name" class="form-control" type="text" name="contact_name" placeholder="Name">
+									</div>
+									<div class="form-group">
+										<input ng-model="new_contact.phone_number" class="form-control" type="number" name="phone_number" placeholder="Phone Number">
+									</div>
+									<div id="action_buttons" class="form-group" ng-hide="editing">
+										<button class="btn btn-primary" ng-click="newContact()">Create</button>
+									</div>
+									<div id="action_buttons" class="form-group" ng-show="editing">
+										<button class="btn btn-primary" ng-click="updateContact()">Update</button>
+										<button class="btn btn-warning" ng-click="cancelUpdate()">Cancel</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+					<div class="row">
+						<div class="col-xs-12">
+							<h3>Contacts:</h3>
+							<accordion close-others="oneAtATime">
+								<accordion-group heading="{{ contact.contact_name }}" ng-repeat="contact in contacts | filter: new_contact.contact_name | filter: new_contact.phone_number">
+								<accordion-heading>
+									<a class="contact_header" ng-click='selectContact(contact)' ng-bind="contact.contact_name"></a>
+								</accordion-heading>
+									<h3 class="contact_name">{{ contact.contact_name }}</h3>
+									<p class="phone_number" ng-bind="contact.phone_number"></p>
+								</accordion-group>
+							</accordion>
+						</div>
+					</div>
+				</div>
+				<div id="messageSection" class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+					<h3>Send Message</h3>
+					<div ng-repeat="msgErr in messageError">
+						<p class="noContactSelectedError errors" ng-bind="msgErr"></p>
+					</div>
+					<div class="col-xs-12">
+						<div class="form-group">
+							<p>To: {{ recipient }}</p>
+							<p ng-bind="recipientPhoneNumber"></p>
+						</div>
+						<form class="form-horizontal" role="form">
+							<input type="hidden" name="id" id="recipientID">
+							<div class="form-group">
+								<textarea  ng-model="new_message.text_message" class="form-control" type="text" name="text_message" placeholder="Type message here..."></textarea>
+							</div>
+							<div class="form-group">
+								<button id="sendMessage" class="btn btn-primary" ng-click="sendMessage()">Send</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="hidden">
+					<button id="noContactSelected" ng-click="noContactSelected()"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

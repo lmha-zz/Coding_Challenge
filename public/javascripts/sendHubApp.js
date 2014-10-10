@@ -1,0 +1,1 @@
+var sendHubApp = angular.module('sendHubApp', ['ngRoute', 'ui.bootstrap']);
