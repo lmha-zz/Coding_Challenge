@@ -18,3 +18,8 @@ a {
 .success {
 	color:green;
 }
+
+#contacts_wrapper {
+	height: 270px;
+	overflow: auto;
+}

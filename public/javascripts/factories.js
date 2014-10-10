@@ -28,7 +28,10 @@ sendHubApp.factory('ContactFactory', function($http) {
 			if(!(err["name"] == undefined)) {
 				err.name[0] = "Contact name required.";
 			}
-			if(!(err["number"] == undefined)) {
+			console.log(err["number"])
+			if(err["number"] != undefined && err['number'] == "That number is already in your contacts.") {
+				err.number[0] = "Phone number is already in your contacts.";
+			} else {
 				err.number[0] = "Phone number required.";
 			}
 			errCallback(err);
@@ -51,6 +54,17 @@ sendHubApp.factory('ContactFactory', function($http) {
 			if(!(err["number"] == undefined)) {
 				err.number[0] = "Phone number required.";
 			}
+			errCallback(err);
+		})
+	}
+	factory.deleteContact = function(contactID, index, errCallback, succsCallback) {
+		var url = "https://api.sendhub.com/v1/contacts/"+contactID+"/?username="+urlUsername+"&api_key="+apiKey;
+		$http.delete(url)
+		.success(function(win){
+			contacts.splice(index,1);
+			succsCallback();
+		})
+		.error(function(err){
 			errCallback(err);
 		})
 	}

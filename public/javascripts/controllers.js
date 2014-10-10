@@ -15,13 +15,19 @@ sendHubApp.controller('contacts', ['$scope', '$http', 'ContactFactory', 'Message
         $scope.errors = errs;
       },
       function(contacts) {
+        $scope.conStatus = "Created contact.";
         $scope.contacts = contacts;
+        $scope.recipientID;
+        $scope.recipient;
+        $scope.recipientPhoneNumber;
+        $scope.new_contact = {};
       }
     );
-    $scope.new_contact = null;
   }
 
   $scope.selectContact = function(contact, index) {
+    $scope.conStatus = "";
+    // console.log(contact)
     $scope.msgStatus = '';
     $scope.messageError = [];
     $scope.contactIndex = index;
@@ -42,11 +48,34 @@ sendHubApp.controller('contacts', ['$scope', '$http', 'ContactFactory', 'Message
       },
       function(contact) {
         $scope.contacts[$scope.contactIndex].name = contact.name;
+        $scope.contacts[$scope.contactIndex].number = contact.number;
+        $scope.recipient = contact.name;
+        $scope.recipientPhoneNumber = contact.number;
+      }
+    );
+  };
+
+  $scope.deleteContact = function() {
+    $scope.conStatus = "";
+    $scope.errors = '';
+    console.log('deleting this one',$scope.recipientID)
+    ContactFactory.deleteContact($scope.recipientID, $scope.contactIndex,
+      function(err){
+        $scope.errors = errs;
+      },
+      function() {
+        console.log('factory win reset stuff');
+        $scope.recipientID = undefined;
+        $scope.recipient = undefined;
+        $scope.recipientPhoneNumber = undefined;
+        $scope.new_contact = {};
+        $scope.editing = false;
       }
     );
   }
 
   $scope.cancelUpdate = function() {
+    $scope.conStatus = "";
     $scope.errors = '';
     $scope.new_contact = {};
     $scope.editing = false;

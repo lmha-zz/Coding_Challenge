@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="sendHubApp">
 <head>
-	<title ng-bind="title"></title>
+	<title>SendHub Coding Challenge</title>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -21,8 +21,9 @@
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 					<div class="row">
 						<div class="col-xs-12">
-							<h2 ng-hide="editing">Create Contact</h2>
-							<h2 ng-show="editing">Edit Contact</h2>
+							<h2 ng-hide="editing">Create a Contact</h2>
+							<h2 ng-show="editing">Edit {{ recipient }}</h2>
+							<p class='success' ng-bind="conStatus"></p>
 							<p class="errors" ng-repeat="error in errors track by $index" ng-bind="error"></p>
 							<div class="col-xs-12">
 								<form id="contactForm" class="form-horizontal" role="form">
@@ -37,7 +38,8 @@
 									</div>
 									<div id="action_buttons" class="form-group" ng-show="editing">
 										<button class="btn btn-primary" ng-click="updateContact()">Update</button>
-										<button class="btn btn-warning" ng-click="cancelUpdate()">Cancel</button>
+										<button class="btn btn-warning" ng-click="cancelUpdate()" ng-click="status.open = !status.open">Cancel</button>
+										<button class="btn btn-danger pull-right" ng-click="deleteContact()">Delete</button>
 									</div>
 								</form>
 							</div>
@@ -48,8 +50,8 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 					<div class="row">
-						<div class="col-xs-12">
-							<h3>Contacts:</h3>
+						<h3>Contacts:</h3>
+						<div id="contacts_wrapper" class="col-xs-12">
 							<accordion close-others="oneAtATime">
 								<accordion-group heading="{{ contact.name }}" ng-repeat="contact in contacts track by $index | filter: new_contact.contact_name | filter: new_contact.phone_number">
 								<accordion-heading>
