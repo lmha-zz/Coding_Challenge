@@ -4,38 +4,43 @@ sendHubApp.factory('ContactFactory', function($http) {
 	var factory = {};
 	var contacts = [];
 	factory.getContacts = function(callback) {
-		var url = "https://api.sendhub.com/v1/contacts/?username="+urlUsername+"&api_key="+apiKey;
-		$http.get(url)
-		.success(function(data) {
-			contacts = data.objects;
-			callback(contacts);
+		$http.get('/contacts.json').success(function(allContacts){
+			contacts = allContacts;
+			callback(allContacts);
 		})
 	}
 	factory.createContact = function(contact, errCallback, succsCallback) {
-		var url = "https://api.sendhub.com/v1/contacts/?username="+urlUsername+"&api_key="+apiKey;
-		console.log(contact)
-		$http.post(url,
-		{
-			name: contact.contact_name,
-			number: contact.phone_number
-		}
-		)
-		.success(function(data) {
-			contacts.unshift(data);
-			succsCallback(contacts);
-		})
-		.error(function(err) {
-			if(!(err["name"] == undefined)) {
-				err.name[0] = "Contact name required.";
-			}
-			console.log(err["number"])
-			if(err["number"] != undefined && err['number'] == "That number is already in your contacts.") {
-				err.number[0] = "Phone number is already in your contacts.";
-			} else {
-				err.number[0] = "Phone number required.";
-			}
-			errCallback(err);
-		})
+		$http.post('/contacts/create', { contact: contact })
+			.success(function(allContacts){
+				contacts.unshift(data);
+				succsCallback(contacts);
+			})
+			.error(function(err){
+				console.log('errors in factory!!!' , err);
+				errCallback(err);
+			})
+		// var url = "https://api.sendhub.com/v1/contacts/?username="+urlUsername+"&api_key="+apiKey;
+		// $http.post(url,
+		// {
+		// 	name: contact.contact_name,
+		// 	number: contact.phone_number
+		// }
+		// )
+		// .success(function(data) {
+		// 	contacts.unshift(data);
+		// 	succsCallback(contacts);
+		// })
+		// .error(function(err) {
+			// if(!(err["name"] == undefined)) {
+			// 	err.name[0] = "Contact name required.";
+			// }
+			// if(err["number"] != undefined && err['number'] == "That number is already in your contacts.") {
+			// 	err.number[0] = "Phone number is already in your contacts.";
+			// } else {
+			// 	err.number[0] = "Phone number required.";
+			// }
+			// errCallback(err);
+		// })
 	}
 	factory.updateContact = function(contactID, contact, errCallback, succsCallback) {
 		var url = "https://api.sendhub.com/v1/contacts/"+contactID+"/?username="+urlUsername+"&api_key="+apiKey;

@@ -27,7 +27,6 @@ sendHubApp.controller('contacts', ['$scope', '$http', 'ContactFactory', 'Message
 
   $scope.selectContact = function(contact, index) {
     $scope.conStatus = "";
-    // console.log(contact)
     $scope.msgStatus = '';
     $scope.messageError = [];
     $scope.contactIndex = index;
@@ -58,13 +57,11 @@ sendHubApp.controller('contacts', ['$scope', '$http', 'ContactFactory', 'Message
   $scope.deleteContact = function() {
     $scope.conStatus = "";
     $scope.errors = '';
-    console.log('deleting this one',$scope.recipientID)
     ContactFactory.deleteContact($scope.recipientID, $scope.contactIndex,
       function(err){
         $scope.errors = errs;
       },
       function() {
-        console.log('factory win reset stuff');
         $scope.recipientID = undefined;
         $scope.recipient = undefined;
         $scope.recipientPhoneNumber = undefined;
